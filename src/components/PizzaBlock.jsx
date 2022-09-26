@@ -1,27 +1,34 @@
-export default function PizzaBlock(props) {
-  console.log(props)
-    return (
-    <div class="pizza-block">
+import React from 'react';
+
+export default function PizzaBlock({ title, price }) {
+  const [pizzaCount, setPizzaCount] = React.useState(0);
+
+  const onClickAdd = () => {
+    setPizzaCount(pizzaCount + 1);
+  }
+
+  return (
+  <div className="pizza-block">
     <img
-      class="pizza-block__image"
+      className="pizza-block__image"
       src="https://dodopizza-a.akamaihd.net/static/Img/Products/Pizza/ru-RU/b750f576-4a83-48e6-a283-5a8efb68c35d.jpg"
       alt="Pizza"
     />
-    <h4 class="pizza-block__title">{props.title}</h4>
-    <div class="pizza-block__selector">
+    <h4 className="pizza-block__title">{title}</h4>
+    <div className="pizza-block__selector">
       <ul>
-        <li class="active">тонкое</li>
+        <li className="active">тонкое</li>
         <li>традиционное</li>
       </ul>
       <ul>
-        <li class="active">26 см.</li>
+        <li className="active">26 см.</li>
         <li>30 см.</li>
         <li>40 см.</li>
       </ul>
     </div>
-    <div class="pizza-block__bottom">
-      <div class="pizza-block__price">от {props.price} ₽</div>
-      <div class="button button--outline button--add">
+    <div className="pizza-block__bottom">
+      <div className="pizza-block__price">от {price} ₽</div>
+      <button onClick={onClickAdd} className="button button--outline button--add">
         <svg
           width="12"
           height="12"
@@ -35,8 +42,9 @@ export default function PizzaBlock(props) {
           />
         </svg>
         <span>Добавить</span>
-        <i>2</i>
-      </div>
+        <i>{pizzaCount}</i>
+      </button>
     </div>
-  </div>)
+  </div>
+  )
 }
