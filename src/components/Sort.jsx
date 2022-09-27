@@ -1,4 +1,8 @@
+import React from "react";
+
 export default function Sort() {
+const [open, setOpen] = React.useState(false);
+
     return (
       <div className="sort">
         <div className="sort__label">
@@ -17,6 +21,7 @@ export default function Sort() {
           <b>Сортировка по:</b>
           <span>популярности</span>
         </div>
+        {open && (
         <div className="sort__popup">
           <ul>
             <li className="active">популярности</li>
@@ -24,6 +29,7 @@ export default function Sort() {
             <li>алфавиту</li>
           </ul>
         </div>
+        )}
       </div>
     );
   }
