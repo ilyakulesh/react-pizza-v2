@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 import Pagination from "../components/Pagination";
 import Catigories from "../components/Categories";
@@ -6,22 +7,33 @@ import Sort from "../components/Sort";
 import PizzaBlock from "../components/PizzaBlock";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 import { SearchContext } from "../App";
+import { setCategoryId } from "../redux/slices/filterSlice";
 
 const Home = () => {
+  const dispatch = useDispatch();
+  const categoryId = useSelector((state) => state.filter.categoryId);
+
+  console.log("categoryId", categoryId);
+
   const { searchValue } = React.useContext(SearchContext);
   const [items, setItems] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
-  const [categoryId, setCategoryId] = React.useState(0);
+  // const [categoryId, setCategoryId] = React.useState(0);
   const [currentPage, setCurrentPage] = React.useState(1);
   const [sortType, setSortType] = React.useState({
     name: "популярности",
     sortProperty: "rating",
   });
 
+  const onChangeCategory = (id) => {
+    console.log("onChangeCategory", id);
+    dispatch(setCategoryId(id));
+  };
+
   React.useEffect(() => {
     setIsLoading(true);
 
-    const category = categoryId > 0 ? `category=${categoryId}` : "";
+    const category = categoryId > 0 ? `&category=${categoryId}` : "";
     const search = searchValue ? `&search=${searchValue}` : "";
     const sortBy = sortType.sortProperty.replace("-", "");
     const order = sortType.sortProperty.includes("-") ? "asc" : "desc";
@@ -45,10 +57,7 @@ const Home = () => {
   return (
     <div className="container">
       <div className="content__top">
-        <Catigories
-          value={categoryId}
-          onClickCategory={(i) => setCategoryId(i)}
-        />
+        <Catigories value={categoryId} onClickCategory={onChangeCategory} />
         <Sort value={sortType} onClickSortType={(i) => setSortType(i)} />
       </div>
       <h2 className="content__title">Все пиццы</h2>

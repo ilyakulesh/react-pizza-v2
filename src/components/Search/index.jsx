@@ -10,7 +10,7 @@ const Search = () => {
     <div className={styles.root}>
       <svg
         className={styles.icon}
-        enable-background="new 0 0 32 32"
+        enableBackground="new 0 0 32 32"
         id="Editable-line"
         version="1.1"
         viewBox="0 0 32 32"
@@ -23,19 +23,19 @@ const Search = () => {
           id="XMLID_42_"
           r="9"
           stroke="#000000"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-miterlimit="10"
-          stroke-width="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeMiterlimit="10"
+          strokeWidth="2"
         />
         <line
           fill="none"
           id="XMLID_44_"
           stroke="#000000"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-miterlimit="10"
-          stroke-width="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          strokeMiterlimit="10"
+          strokeWidth="2"
           x1="27"
           x2="20.366"
           y1="27"
