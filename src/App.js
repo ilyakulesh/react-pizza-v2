@@ -1,5 +1,4 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
 import { Routes, Route } from "react-router-dom";
 import "./scss/app.scss";
 
