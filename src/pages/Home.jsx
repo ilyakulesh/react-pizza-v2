@@ -1,4 +1,5 @@
 import React from "react";
+import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 
 import Pagination from "../components/Pagination";
@@ -31,14 +32,15 @@ const Home = () => {
     const sortBy = sort.sortProperty.replace("-", "");
     const order = sort.sortProperty.includes("-") ? "asc" : "desc";
 
-    fetch(
-      `https://63334d6b573c03ab0b5bcff0.mockapi.io/items?&page=${currentPage}&limit=4${category}&sortBy=${sortBy}&order=${order}${search}`
-    )
-      .then((res) => res.json())
-      .then((json) => {
-        setItems(json);
+    axios
+      .get(
+        `https://63334d6b573c03ab0b5bcff0.mockapi.io/items?&page=${currentPage}&limit=4${category}&sortBy=${sortBy}&order=${order}${search}`
+      )
+      .then((res) => {
+        setItems(res.data);
         setIsLoading(false);
       });
+
     window.scrollTo(0, 0);
   }, [categoryId, sort.sortProperty, searchValue, currentPage]);
 
