@@ -21,7 +21,6 @@ const Home = () => {
   const [isLoading, setIsLoading] = React.useState(true);
 
   const onChangeCategory = (id) => {
-    console.log("onChangeCategory", id);
     dispatch(setCategoryId(id));
   };
 
@@ -29,7 +28,7 @@ const Home = () => {
     dispatch(setCurrentPage(number));
   };
 
-  React.useEffect(() => {
+  const fetchPizzas = async () => {
     setIsLoading(true);
 
     const category = categoryId > 0 ? `&category=${categoryId}` : "";
@@ -37,16 +36,22 @@ const Home = () => {
     const sortBy = sort.sortProperty.replace("-", "");
     const order = sort.sortProperty.includes("-") ? "asc" : "desc";
 
-    axios
-      .get(
+    try {
+      const res = await axios.get(
         `https://63334d6b573c03ab0b5bcff0.mockapi.io/items?&page=${currentPage}&limit=4${category}&sortBy=${sortBy}&order=${order}${search}`
-      )
-      .then((res) => {
-        setItems(res.data);
-        setIsLoading(false);
-      });
+      );
+      setItems(res.data);
+      setIsLoading(false);
+    } catch {
+      setIsLoading(false);
+      alert("Ошибка при получении пицц");
+    }
 
     window.scrollTo(0, 0);
+  };
+
+  React.useEffect(() => {
+    fetchPizzas();
   }, [categoryId, sort.sortProperty, searchValue, currentPage]);
 
   const skeletons = [...new Array(6)].map((_, index) => (
