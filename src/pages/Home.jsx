@@ -9,15 +9,16 @@ import PizzaBlock from "../components/PizzaBlock";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 import { SearchContext } from "../App";
 import { setCategoryId, setCurrentPage } from "../redux/slices/filterSlice";
+import { setItems } from "../redux/slices/pizzaSlice";
 
 const Home = () => {
   const dispatch = useDispatch();
+  const items = useSelector((state) => state.pizza.items);
   const { categoryId, sort, currentPage } = useSelector(
     (state) => state.filter
   );
 
   const { searchValue } = React.useContext(SearchContext);
-  const [items, setItems] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(true);
 
   const onChangeCategory = (id) => {
@@ -37,14 +38,14 @@ const Home = () => {
     const order = sort.sortProperty.includes("-") ? "asc" : "desc";
 
     try {
-      const res = await axios.get(
+      const { data } = await axios.get(
         `https://63334d6b573c03ab0b5bcff0.mockapi.io/items?&page=${currentPage}&limit=4${category}&sortBy=${sortBy}&order=${order}${search}`
       );
-      setItems(res.data);
-      setIsLoading(false);
+      dispatch(setItems(data));
     } catch {
-      setIsLoading(false);
       alert("Ошибка при получении пицц");
+    } finally {
+      setIsLoading(false);
     }
 
     window.scrollTo(0, 0);
