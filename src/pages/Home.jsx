@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 
 import Pagination from "../components/Pagination";
@@ -9,7 +8,7 @@ import PizzaBlock from "../components/PizzaBlock";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 import { SearchContext } from "../App";
 import { setCategoryId, setCurrentPage } from "../redux/slices/filterSlice";
-import { setItems } from "../redux/slices/pizzaSlice";
+import { fetchPizzas } from "../redux/slices/pizzaSlice";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -29,7 +28,7 @@ const Home = () => {
     dispatch(setCurrentPage(number));
   };
 
-  const fetchPizzas = async () => {
+  const getPizzas = async () => {
     setIsLoading(true);
 
     const category = categoryId > 0 ? `&category=${categoryId}` : "";
@@ -38,10 +37,15 @@ const Home = () => {
     const order = sort.sortProperty.includes("-") ? "asc" : "desc";
 
     try {
-      const { data } = await axios.get(
-        `https://63334d6b573c03ab0b5bcff0.mockapi.io/items?&page=${currentPage}&limit=4${category}&sortBy=${sortBy}&order=${order}${search}`
+      dispatch(
+        fetchPizzas({
+          category,
+          search,
+          sortBy,
+          order,
+          currentPage,
+        })
       );
-      dispatch(setItems(data));
     } catch {
       alert("Ошибка при получении пицц");
     } finally {
@@ -52,7 +56,7 @@ const Home = () => {
   };
 
   React.useEffect(() => {
-    fetchPizzas();
+    getPizzas();
   }, [categoryId, sort.sortProperty, searchValue, currentPage]);
 
   const skeletons = [...new Array(6)].map((_, index) => (
