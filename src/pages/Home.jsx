@@ -12,13 +12,12 @@ import { fetchPizzas } from "../redux/slices/pizzaSlice";
 
 const Home = () => {
   const dispatch = useDispatch();
-  const items = useSelector((state) => state.pizza.items);
+  const { items, status } = useSelector((state) => state.pizza);
   const { categoryId, sort, currentPage } = useSelector(
     (state) => state.filter
   );
 
   const { searchValue } = React.useContext(SearchContext);
-  const [isLoading, setIsLoading] = React.useState(true);
 
   const onChangeCategory = (id) => {
     dispatch(setCategoryId(id));
@@ -29,29 +28,20 @@ const Home = () => {
   };
 
   const getPizzas = async () => {
-    setIsLoading(true);
-
     const category = categoryId > 0 ? `&category=${categoryId}` : "";
     const search = searchValue ? `&search=${searchValue}` : "";
     const sortBy = sort.sortProperty.replace("-", "");
     const order = sort.sortProperty.includes("-") ? "asc" : "desc";
 
-    try {
-      dispatch(
-        fetchPizzas({
-          category,
-          search,
-          sortBy,
-          order,
-          currentPage,
-        })
-      );
-    } catch {
-      alert("Ошибка при получении пицц");
-    } finally {
-      setIsLoading(false);
-    }
-
+    dispatch(
+      fetchPizzas({
+        category,
+        search,
+        sortBy,
+        order,
+        currentPage,
+      })
+    );
     window.scrollTo(0, 0);
   };
 
@@ -71,7 +61,20 @@ const Home = () => {
         <Sort />
       </div>
       <h2 className="content__title">Все пиццы</h2>
-      <div className="content__items">{isLoading ? skeletons : pizzas}</div>
+      {status == "error" ? (
+        <div className="content__error-info">
+          <h2>Произошла ошибка 😕</h2>
+          <p>
+            К сожалению, не удалось получить пиццы. Попробуйте повторить попытку
+            позже.
+          </p>
+        </div>
+      ) : (
+        <div className="content__items">
+          {status == "loading" ? skeletons : pizzas}
+        </div>
+      )}
+
       <Pagination currentPage={currentPage} onChangePage={onChangePage} />
     </div>
   );
