@@ -7,15 +7,17 @@ import Sort from "../components/Sort";
 import PizzaBlock from "../components/PizzaBlock";
 import Skeleton from "../components/PizzaBlock/Skeleton";
 import { SearchContext } from "../App";
-import { setCategoryId, setCurrentPage } from "../redux/slices/filterSlice";
-import { fetchPizzas } from "../redux/slices/pizzaSlice";
+import {
+  selectFilter,
+  setCategoryId,
+  setCurrentPage,
+} from "../redux/slices/filterSlice";
+import { fetchPizzas, selectPizzaData } from "../redux/slices/pizzaSlice";
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { items, status } = useSelector((state) => state.pizza);
-  const { categoryId, sort, currentPage } = useSelector(
-    (state) => state.filter
-  );
+  const { items, status } = useSelector(selectPizzaData);
+  const { categoryId, sort, currentPage } = useSelector(selectFilter);
 
   const { searchValue } = React.useContext(SearchContext);
 
@@ -61,7 +63,7 @@ const Home = () => {
         <Sort />
       </div>
       <h2 className="content__title">Все пиццы</h2>
-      {status == "error" ? (
+      {status === "error" ? (
         <div className="content__error-info">
           <h2>Произошла ошибка 😕</h2>
           <p>
@@ -71,7 +73,7 @@ const Home = () => {
         </div>
       ) : (
         <div className="content__items">
-          {status == "loading" ? skeletons : pizzas}
+          {status === "loading" ? skeletons : pizzas}
         </div>
       )}
 
