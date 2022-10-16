@@ -24,7 +24,7 @@ const FullPizza = () => {
   }, []);
 
   if (!pizza) {
-    return "Загрузка...";
+    return <>"Загрузка..."</>;
   }
   return (
     <div className="container">
