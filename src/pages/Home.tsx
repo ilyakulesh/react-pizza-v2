@@ -1,5 +1,5 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 import Pagination from "../components/Pagination";
 import Catigories from "../components/Categories";
@@ -12,9 +12,10 @@ import {
   setCurrentPage,
 } from "../redux/slices/filterSlice";
 import { fetchPizzas, selectPizzaData } from "../redux/slices/pizzaSlice";
+import { useAppDispatch } from "../redux/store";
 
 const Home: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { items, status } = useSelector(selectPizzaData);
   const { categoryId, sort, currentPage, searchValue } =
     useSelector(selectFilter);
@@ -34,13 +35,12 @@ const Home: React.FC = () => {
     const order = sort.sortProperty.includes("-") ? "asc" : "desc";
 
     dispatch(
-      // @ts-ignore
       fetchPizzas({
         category,
         search,
         sortBy,
         order,
-        currentPage,
+        currentPage: String(currentPage),
       })
     );
     window.scrollTo(0, 0);
